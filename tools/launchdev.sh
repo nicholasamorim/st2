@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 
 function usage() {
     echo "Usage: $0 [start|stop|restart|startclean] [-r runner_count] [-s scheduler_count] [-w workflow_engine_count] [-g] [-x] [-c] [-6] [-m]" >&2
@@ -428,6 +429,7 @@ function st2start(){
     fi
 
     if [ "$copy_test_packs" = true ]; then
+        which st2
         st2 run packs.setup_virtualenv packs=fixtures
         if [ $? != 0 ]; then
             echo "Warning: Unable to setup virtualenv for the \"tests\" pack. Please setup virtualenv for the \"tests\" pack before running integration tests"
