@@ -122,6 +122,8 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
             abort(http_client.BAD_REQUEST, msg)
             return
 
+        static_parameters = action_alias_db.static or {}
+
         if match_multiple:
             multiple_execution_parameters = extract_parameters_for_action_alias_db(
                 action_alias_db=action_alias_db,
@@ -136,6 +138,9 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
                     param_stream=command,
                     match_multiple=match_multiple)
             ]
+
+        for exec_params in multiple_execution_parameters:
+            exec_params.update(static_parameters)
 
         notify = self._get_notify_field(payload)
 
