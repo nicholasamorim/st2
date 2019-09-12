@@ -79,7 +79,7 @@ class AliasExecutionTestCase(FunctionalTest):
 
     @mock.patch.object(action_service, 'request',
                        return_value=(None, EXECUTION))
-    def test_basic_execution_with_static_parameter(self, request):
+    def test_basic_execution_with_action_parameters(self, request):
         command = 'lorem ipsum'
         post_resp = self._do_post(alias_execution=self.alias5, command=command)
         self.assertEqual(post_resp.status_int, 201)

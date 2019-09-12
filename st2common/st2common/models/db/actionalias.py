@@ -71,8 +71,8 @@ class ActionAliasDB(stormbase.StormFoundationDB, stormbase.ContentPackResourceMi
     extra = me.DictField(
         help_text='Additional parameters (usually adapter-specific) not covered in the schema.'
     )
-    static = me.DictField(
-        help_text='Additional static parameters to be passed to the action on every execution.')
+    action_parameters = me.DictField(
+        help_text='Parameters to be passed to the action on every execution.')
 
     meta = {
         'indexes': [
