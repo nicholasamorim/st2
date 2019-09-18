@@ -229,14 +229,12 @@ def inject_immutable_parameters(action_alias_db, multiple_execution_parameters):
         return multiple_execution_parameters
 
     for exec_params in multiple_execution_parameters:
-        overriden = [exec_params.get(param) for param in immutable_parameters.keys()]
+        overriden = [param for param in immutable_parameters.keys() if param in exec_params]
         if overriden:
             raise ValueError(
                 "Immutable arguments cannot be overriden: {}".format(
-                    overriden.split(',')))
+                    ','.join(overriden)))
 
-        if exec_params.keys() in immutable_parameters:
-            raise ValueError()
         exec_params.update(immutable_parameters)
 
     return multiple_execution_parameters

@@ -138,7 +138,6 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
                     match_multiple=match_multiple)
             ]
 
-        immutable_parameters = action_alias_db.immutable_parameters or {}
         inject_immutable_parameters(
             action_alias_db=action_alias_db,
             multiple_execution_parameters=multiple_execution_parameters)
@@ -151,15 +150,9 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
             'user': requester_user.name,
             'source_channel': payload.source_channel,
         }
-        immutable_parameters = action_alias_db.immutable_parameters or {}
 
         results = []
         for execution_parameters in multiple_execution_parameters:
-            # if immutable_parameters:
-            #     overriden = [
-            #         execution_parameters.get(param)
-            #         for param in immutable_parameters.keys()]
-
             execution = self._schedule_execution(action_alias_db=action_alias_db,
                                                  params=execution_parameters,
                                                  notify=notify,
