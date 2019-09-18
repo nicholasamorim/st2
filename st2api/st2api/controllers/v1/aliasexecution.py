@@ -138,10 +138,6 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
                     match_multiple=match_multiple)
             ]
 
-        inject_immutable_parameters(
-            action_alias_db=action_alias_db,
-            multiple_execution_parameters=multiple_execution_parameters)
-
         notify = self._get_notify_field(payload)
 
         context = {
@@ -150,6 +146,11 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
             'user': requester_user.name,
             'source_channel': payload.source_channel,
         }
+
+        inject_immutable_parameters(
+            action_alias_db=action_alias_db,
+            multiple_execution_parameters=multiple_execution_parameters,
+            context=context)
 
         results = []
         for execution_parameters in multiple_execution_parameters:

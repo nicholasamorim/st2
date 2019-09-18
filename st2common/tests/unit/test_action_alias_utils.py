@@ -329,14 +329,23 @@ class TestInjectImmutableParameters(TestCase):
         action_alias_db = Mock()
         action_alias_db.immutable_parameters = {"env": "dev"}
         exec_params = [{"param1": "value1", "param2": "value2"}]
-        inject_immutable_parameters(action_alias_db, exec_params)
+        inject_immutable_parameters(action_alias_db, exec_params, {})
         self.assertEqual(
             exec_params,
             [{"param1": "value1", "param2": "value2", "env": "dev"}])
+
+    def test_immutable_parameters_with_jinja(self):
+        action_alias_db = Mock()
+        action_alias_db.immutable_parameters = {"env": '{{ "dev" + "1" }}'}
+        exec_params = [{"param1": "value1", "param2": "value2"}]
+        inject_immutable_parameters(action_alias_db, exec_params, {})
+        self.assertEqual(
+            exec_params,
+            [{"param1": "value1", "param2": "value2", "env": "dev1"}])
 
     def test_override_raises_error(self):
         action_alias_db = Mock()
         action_alias_db.immutable_parameters = {"env": "dev"}
         exec_params = [{"param1": "value1", "env": "prod"}]
         with self.assertRaises(ValueError):
-            inject_immutable_parameters(action_alias_db, exec_params)
+            inject_immutable_parameters(action_alias_db, exec_params, {})

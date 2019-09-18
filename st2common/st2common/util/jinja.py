@@ -124,7 +124,6 @@ def render_values(mapping=None, context=None, allow_undefined=False):
 
     :rtype: ``dict``
     """
-
     if not context or not mapping:
         return mapping
 
