@@ -220,6 +220,28 @@ def extract_parameters(format_str, param_stream, match_multiple=False):
         return parser.get_extracted_param_value()
 
 
+def inject_immutable_parameters(action_alias_db, multiple_execution_parameters):
+    """
+    Inject immutable parameters from the alias definiton on the execution parameters.
+    """
+    immutable_parameters = action_alias_db.immutable_parameters or {}
+    if not immutable_parameters:
+        return multiple_execution_parameters
+
+    for exec_params in multiple_execution_parameters:
+        overriden = [exec_params.get(param) for param in immutable_parameters.keys()]
+        if overriden:
+            raise ValueError(
+                "Immutable arguments cannot be overriden: {}".format(
+                    overriden.split(',')))
+
+        if exec_params.keys() in immutable_parameters:
+            raise ValueError()
+        exec_params.update(immutable_parameters)
+
+    return multiple_execution_parameters
+
+
 def search_regex_tokens(needle_tokens, haystack_tokens, backwards=False):
     """
     Search a tokenized regex for any tokens in needle_tokens. Returns True if

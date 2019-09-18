@@ -30,6 +30,7 @@ from st2common.models.db.liveaction import LiveActionDB
 from st2common.models.db.notification import NotificationSchema, NotificationSubSchema
 from st2common.models.utils import action_param_utils
 from st2common.models.utils.action_alias_utils import extract_parameters_for_action_alias_db
+from st2common.models.utils.action_alias_utils import inject_immutable_parameters
 from st2common.persistence.actionalias import ActionAlias
 from st2common.services import action as action_service
 from st2common.util import action_db as action_utils
@@ -122,8 +123,6 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
             abort(http_client.BAD_REQUEST, msg)
             return
 
-        action_parameters = action_alias_db.action_parameters or {}
-
         if match_multiple:
             multiple_execution_parameters = extract_parameters_for_action_alias_db(
                 action_alias_db=action_alias_db,
@@ -139,8 +138,10 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
                     match_multiple=match_multiple)
             ]
 
-        for exec_params in multiple_execution_parameters:
-            exec_params.update(action_parameters)
+        immutable_parameters = action_alias_db.immutable_parameters or {}
+        inject_immutable_parameters(
+            action_alias_db=action_alias_db,
+            multiple_execution_parameters=multiple_execution_parameters)
 
         notify = self._get_notify_field(payload)
 
@@ -150,9 +151,15 @@ class ActionAliasExecutionController(BaseRestControllerMixin):
             'user': requester_user.name,
             'source_channel': payload.source_channel,
         }
+        immutable_parameters = action_alias_db.immutable_parameters or {}
 
         results = []
         for execution_parameters in multiple_execution_parameters:
+            # if immutable_parameters:
+            #     overriden = [
+            #         execution_parameters.get(param)
+            #         for param in immutable_parameters.keys()]
+
             execution = self._schedule_execution(action_alias_db=action_alias_db,
                                                  params=execution_parameters,
                                                  notify=notify,

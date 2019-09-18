@@ -624,7 +624,7 @@ class ActionAliasAPI(BaseAPI, APIUIDMixin):
                 "type": "object",
                 "description": "Extra parameters, usually adapter-specific."
             },
-            "action_parameters": {
+            "immutable_parameters": {
                 "type": "object",
                 "description": "Parameters to be passed to the action on every execution."
             },
@@ -649,12 +649,12 @@ class ActionAliasAPI(BaseAPI, APIUIDMixin):
         ack = getattr(alias, 'ack', None)
         result = getattr(alias, 'result', None)
         extra = getattr(alias, 'extra', None)
-        action_parameters = getattr(alias, 'action_parameters', None)
+        immutable_parameters = getattr(alias, 'immutable_parameters', None)
         metadata_file = getattr(alias, 'metadata_file', None)
 
         model = cls.model(name=name, description=description, pack=pack, ref=ref,
                           enabled=enabled, action_ref=action_ref, formats=formats,
-                          ack=ack, result=result, extra=extra, action_parameters=action_parameters,
+                          ack=ack, result=result, extra=extra, immutable_parameters=immutable_parameters,
                           metadata_file=metadata_file)
         return model
 

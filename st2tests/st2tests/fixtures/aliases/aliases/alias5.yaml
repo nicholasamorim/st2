@@ -5,6 +5,6 @@
     action_ref: "wolfpack.action1"
     formats:
         - "lorem ipsum"
-    action_parameters:
+    immutable_parameters:
         param1: value1
         param2: value2

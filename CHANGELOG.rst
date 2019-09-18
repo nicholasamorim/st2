@@ -11,7 +11,7 @@ Added
   ``url_hosts_blacklist`` and ``url_hosts_whitelist`` runner attribute. (new feature)
   #4757
 * Add ``user`` parameter to ``re_run`` method of st2client. #4785
-* Add support for `action_parameters` on Action Aliases. This feature allows default
+* Add support for `immutable_parameters` on Action Aliases. This feature allows default
   parameters to be supplied to the action on every execution. #4786
 
 Changed
